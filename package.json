@@ -2,7 +2,7 @@
   "name": "Express-Chat",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,10 +11,15 @@
     "url": "git+https://github.com/Fancystacks/Express-Chat.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Leah Migacz",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Fancystacks/Express-Chat/issues"
   },
-  "homepage": "https://github.com/Fancystacks/Express-Chat#readme"
+  "homepage": "https://github.com/Fancystacks/Express-Chat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "socket.io": "^3.0.1"
+  }
 }
