@@ -9,5 +9,6 @@ socket.on('message', (message) => {
 chatForm.addEventListener('submit' , (event) => {
     event.preventDefault();
     const msg = event.target.elements.msg.value;
-    console.log(msg);
+    
+    socket.emit('chatMessage', msg);
 });
