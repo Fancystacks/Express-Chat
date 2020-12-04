@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
 const formatMsg = require('./utils/messages');
+const { userJoin, getCurrentUser } = require('./utils/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,20 +15,29 @@ const botName = 'ExpressChat Bot';
 
 // runs when client connects
 io.on('connection', (socket) => {
-    console.log("New Web Socket Connection...");
-    // welcomes current user
-    socket.emit('message', formatMsg(botName, 'Welcome to Express Chat!'));
-    // broadcast to channel when user connects
-    socket.broadcast.emit('message', formatMsg(botName, 'A user has joined the chat')); // broadcast to all other users
+    socket.on('joinRoom', ({ username, room }) => {
+        const user = userJoin(socket.id, username, room);
 
-    // runs when client disconnects
-    socket.on('disconnect', () => {
-        io.emit('message', formatMsg(botName, 'A user has left the chat'));
+        socket.join(user.room);
+
+        // welcomes current user
+        socket.emit('message', formatMsg(botName, 'Welcome to Express Chat!'));
+        // broadcast to channel when user connects
+        socket.broadcast
+        .to(user.room)
+        .emit(
+            'message', 
+            formatMsg(botName, `${user.username} has joined the chat`));
     });
 
     // listening for chatMessage
     socket.on('chatMessage', (msg) => {
         io.emit('message', formatMsg('USER', msg));
+    });
+
+    // runs when client disconnects
+    socket.on('disconnect', () => {
+        io.emit('message', formatMsg(botName, 'A user has left the chat'));
     });
 });
 
